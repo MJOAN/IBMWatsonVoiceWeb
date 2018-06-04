@@ -13,6 +13,7 @@
     "watson-developer-cloud": "^3.4.4",
     "watson-speech": "^0.34.1"
   },
+  "proxy": "http://localhost:3002",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
