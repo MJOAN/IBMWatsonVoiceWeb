@@ -22,10 +22,11 @@ const express = require('express');
 const app = express();
 const watson = require('watson-developer-cloud');
 const vcapServices = require('vcap_services');
-const cors = require('cors')
+const cors = require('cors');
 
 // allows environment properties to be set in a file named .env
 require('dotenv').load({ silent: true });
+// require('dotenv').config()
 
 // on bluemix, enable rate-limiting and force https
 if (process.env.VCAP_SERVICES) {
@@ -42,6 +43,8 @@ if (process.env.VCAP_SERVICES) {
   //  apply to /api/*
   app.use('/api/', limiter)
 
+  console.log("server.js is working!")
+
   // force https - microphone access requires https in Chrome and possibly other browsers
   // (*.mybluemix.net domains all have built-in https support)
   const secure = require('express-secure-only');
@@ -49,7 +52,8 @@ if (process.env.VCAP_SERVICES) {
 }
 
 app.use(express.static(__dirname + '/static'));
-app.use(cors())
+app.use(cors()) 
+console.log("cors is working!")
 
 // token endpoints
 // **Warning**: these endpoints should probably be guarded with additional authentication & authorization for production use
@@ -64,6 +68,7 @@ var sttAuthService = new watson.AuthorizationV1(
     vcapServices.getCredentials('speech_to_text') // pulls credentials from environment in bluemix, otherwise returns {}
   )
 );
+
 app.use('/api/speech-to-text/token', function(req, res) {
   sttAuthService.getToken(
     {
@@ -75,6 +80,9 @@ app.use('/api/speech-to-text/token', function(req, res) {
         res.status(500).send('Error retrieving token');
         return;
       }
+
+      console.log('token', token);
+
       res.send(token);
     }
   );
@@ -90,6 +98,7 @@ app.listen(port, function() {
 // this sets up a basic server on port 3001 using an included self-signed certificate
 // note: this is not suitable for production use
 // however bluemix automatically adds https support at https://<myapp>.mybluemix.net
+
 if (!process.env.VCAP_SERVICES) {
   const fs = require('fs');
   const https = require('https');
