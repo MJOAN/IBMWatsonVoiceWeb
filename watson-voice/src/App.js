@@ -51,9 +51,9 @@ class App extends Component {
           <h2 className="App-title">Start speaking and see magic happen!</h2>
         </header>    
 
-        <button onClick={this.listenOnClick.bind(this)}>Start microphone listening!</button>
+        <button id="button" onClick={this.listenOnClick.bind(this)}>Start microphone listening!</button>
         <h2>Transcript:</h2>
-        <div style={{fontSize: '40px'}}>{this.state.text}</div>
+        <div className={{fontSize: '40px'}}>{this.state.text}</div>
       </div>
     );
   }
